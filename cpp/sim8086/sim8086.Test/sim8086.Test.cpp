@@ -9,11 +9,13 @@ namespace sim8086Test
 	TEST_CLASS(sim8086Test)
 	{
 	public:
-		
-		TEST_METHOD(TestMethod1)
+		//10001001 (mov) 11011001 (mov)
+		TEST_METHOD(get_bits_as_char__TEST)
 		{
-			std::string actual = byte_parser::parse_byte(static_cast<char>(0b11110000));
-			Assert::AreEqual(std::string("mov"), actual);
+			uint8_t actual = byte_parser::get_bits_as_uint8(0b11001000, 0, 2);
+			Assert::AreEqual((uint8_t)3, actual);
 		}
+
+		
 	};
 }

@@ -137,6 +137,9 @@
       <Project>{a01c6c86-7481-42b5-a91b-3ad2da0f0e3b}</Project>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="sim8086.h" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

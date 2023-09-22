@@ -24,6 +24,15 @@
     <ClInclude Include="byte_parser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="operation_joint.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OpCode.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="operation_data.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="sim8086.Core.cpp">
@@ -33,6 +42,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="byte_parser.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="operation_joint.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
