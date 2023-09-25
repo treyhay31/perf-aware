@@ -8,7 +8,7 @@ class byte_parser
 {
 public:
   static operation_joint parse_byte(char byte);
-  static operation_data extract_data(operation_joint op, char byte);
+  static void extract_data(&operation_joint op, char byte);
   static std::string
   write_assembly_instruction(operation_joint op, operation_data data,
                              std::vector<char> next_bytes);

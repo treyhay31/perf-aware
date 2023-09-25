@@ -1,1 +1,1 @@
-mov BX + DI, BL
+mov CX, BX

@@ -10,9 +10,9 @@
 
 int main()
 {
-  std::string file_name = "0037_single_register_mov";
+  std::string file_name = "listing_0039_more_movs";
   // Open the binary file for reading
-  std::ifstream file("C:\\train\\perf-aware\\src\\perfaware\\part1\\listing_"
+  std::ifstream file("C:\\train\\perf-aware\\src\\perfaware\\part1\\"
                      + file_name,
                      std::ios::binary);
 
@@ -78,6 +78,7 @@ int main()
 
       output_file << byte_parser::write_assembly_instruction(op, data,
                                                              next_bytes);
+      output_file << std::endl;
     }
 
   // Check if there was an error reading the file
