@@ -1,16 +1,15 @@
 #pragma once
 #include <string>
 #include "operation_joint.h"
-#include "operation_data.h"
 #include "OpCode.h"
 #include <vector>
 class byte_parser
 {
 public:
   static operation_joint parse_byte(char byte);
-  static void extract_data(&operation_joint op, char byte);
+  static void extract_data(operation_joint &op, char byte);
   static std::string
-  write_assembly_instruction(operation_joint op, operation_data data,
+  write_assembly_instruction(operation_joint op,
                              std::vector<char> next_bytes);
   static uint8_t get_bits_as_uint8(char byte, int start_index,
                                          int number_of_bits);

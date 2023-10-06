@@ -12,12 +12,13 @@ int main()
 {
   std::string file_name = "listing_0039_more_movs";
   // Open the binary file for reading
-  std::ifstream file("C:\\train\\perf-aware\\src\\perfaware\\part1\\"
-                     + file_name,
+  std::ifstream file("C:\\train\\perf-aware\\src\\perfaware\\part1\\" +
+                         file_name,
                      std::ios::binary);
 
   // Open a file for writing (create it if it doesn't exist)
-  std::ofstream output_file("C:\\train\\perf-aware\\cpp\\output\\" + file_name + "__output.asm");
+  std::ofstream output_file("C:\\train\\perf-aware\\cpp\\output\\" + file_name +
+                            "__output.asm");
 
   // Check if the file was opened successfully
   if(!output_file.is_open())
@@ -25,7 +26,6 @@ int main()
       std::cerr << "Failed to open the file for writing." << std::endl;
       return 1; // Return an error code
     }
-
 
   if(!file.is_open())
     {
@@ -56,28 +56,51 @@ int main()
       current_byte++;
       operation_joint op = byte_parser::parse_byte(byte);
       char data_byte;
+      std::vector<char> next_bytes;
       if(!file.read(&data_byte, 1))
         {
-          //std::cerr << "No more bytes to read... maybe break here?"
-          //          << std::endl;
+          // std::cerr << "No more bytes to read... maybe break here?"
+          //           << std::endl;
           return 1;
         }
+      std::cout << " data byte: " + byte_parser::get_char_in_bits(data_byte) +
+                       ' ';
       current_byte++;
-
-      operation_data data = byte_parser::extract_data(op, data_byte);
-      std::cout << byte_parser::display_bytes(byte, data_byte) << std::endl;
-      std::vector<char> next_bytes;
-      if (data.more_bytes > 0) {
-          for(size_t i = 0; i < data.more_bytes; i++) {
+      if(op.op_type == OpType::mov__immediate_to_reg)
+        {
+           next_bytes.push_back(data_byte);
+          if(op.w_operation_is_2bytes)
+            {
               char next_byte;
               file.read(&next_byte, 1);
               next_bytes.push_back(next_byte);
-          }
-          // handle the next bytes...
-      }
+              std::cout << " next byte: " +
+                               byte_parser::get_char_in_bits(next_byte) +
+                               ' ';
+              current_byte++;
+            }
+        }
+      else
+        {
+          byte_parser::extract_data(op, data_byte);
+          std::cout << byte_parser::display_bytes(byte, data_byte) << std::endl;
+          if(op.more_bytes > 0)
+            {
+              for(size_t i = 0; i < op.more_bytes; i++)
+                {
+                  char next_byte;
+                  file.read(&next_byte, 1);
+                  next_bytes.push_back(next_byte);
+                  std::cout << " next byte: " +
+                                   byte_parser::get_char_in_bits(next_byte) +
+                                   ' ';
+                  current_byte++;
+                }
+              // handle the next bytes...
+            }
+        }
 
-      output_file << byte_parser::write_assembly_instruction(op, data,
-                                                             next_bytes);
+      output_file << byte_parser::write_assembly_instruction(op, next_bytes);
       output_file << std::endl;
     }
 

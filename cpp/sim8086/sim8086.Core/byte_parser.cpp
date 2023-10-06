@@ -19,18 +19,24 @@ operation_joint byte_parser::parse_byte(char byte)
   char immediate_reg_mem_mov = 0b11000110; // 7
   if(compare_partial_bytes(immediate_reg_mem_mov, byte, 1))
     {
-        joint.op = OpCode::MOV;
+      joint.op = OpCode::MOV;
       joint.op_type = OpType::mov__immediate_reg_mem_mov;
       joint.w_operation_is_2bytes = check_bit(byte, 3);
-       
-          uint8_t reg = get_bits_as_uint8(byte, 0, 3);
+
+      uint8_t reg = get_bits_as_uint8(byte, 0, 3);
       joint.reg_byte = reg;
-          return joint;
+      return joint;
     }
 
   char immediate_to_reg = 0b10110000; // 4
   if(compare_partial_bytes(immediate_to_reg, byte, 4))
     {
+      joint.op = OpCode::MOV;
+      joint.op_type = OpType::mov__immediate_to_reg;
+      joint.w_operation_is_2bytes = check_bit(byte, 3);
+
+      uint8_t reg = get_bits_as_uint8(byte, 0, 3);
+      joint.reg_byte = reg;
       return joint;
     }
 
@@ -60,7 +66,7 @@ operation_joint byte_parser::parse_byte(char byte)
   return joint;
 }
 
-void byte_parser::extract_data(&operation_joint op, char byte)
+void byte_parser::extract_data(operation_joint &op, char byte)
 {
   uint8_t mod_bits = get_bits_as_uint8(byte, 6, 2);
   uint8_t reg_bits = get_bits_as_uint8(byte, 3, 3);
@@ -190,8 +196,6 @@ void byte_parser::extract_data(&operation_joint op, char byte)
         }
       break;
     }
-
-  return data;
 }
 
 uint8_t
@@ -225,14 +229,16 @@ byte_parser::write_assembly_instruction(operation_joint op,
     case OpCode::MOV: instruction += "mov "; break;
     }
 
+  int w_bonus;
+  std::string reg;
+  std::string rm;
   switch(op.op_type)
     {
     case OpType::mov__reg_reg_mov:
-      int w_bonus = op.w_operation_is_2bytes ? 8 : 0;
-      std::string reg = RegTable[w_bonus + op.reg_byte];
-      std::string rm = op.d_reg_is_destination
-                           ? RegTable[w_bonus + op.rm_byte]
-                           : RmTable[op.rm_byte];
+      w_bonus = op.w_operation_is_2bytes ? 8 : 0;
+      reg = RegTable[w_bonus + op.reg_byte];
+      rm = op.mod == OpMod::REG_NO_DISPLACE ? RegTable[w_bonus + op.rm_byte]
+                                            : RmTable[op.rm_byte];
       if(op.d_reg_is_destination)
         { // destination is on the left `mov bx, cx` => `mov dest, src`
           instruction += reg + ", " + rm;
@@ -241,6 +247,22 @@ byte_parser::write_assembly_instruction(operation_joint op,
         {
           instruction += rm + ", " + reg;
         }
+      break;
+    case OpType::mov__immediate_to_reg:
+      std::cout << "doing immediate to reg" << std::endl;
+      w_bonus = op.w_operation_is_2bytes ? 8 : 0;
+      reg = RegTable[w_bonus + op.reg_byte];
+      int val;
+      if(op.w_operation_is_2bytes)
+        {
+          val = (next_bytes[1] << 8) | next_bytes[0];
+        }
+      else
+        {
+          val = next_bytes[0];
+        }
+
+      instruction += reg + ", " + std::to_string(val);
       break;
     }
 

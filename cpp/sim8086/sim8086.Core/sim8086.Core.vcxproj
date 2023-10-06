@@ -142,13 +142,11 @@
     <ClInclude Include="byte_parser.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="OpCode.h" />
-    <ClInclude Include="operation_data.h" />
     <ClInclude Include="operation_joint.h" />
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="byte_parser.cpp" />
-    <ClCompile Include="operation_joint.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
