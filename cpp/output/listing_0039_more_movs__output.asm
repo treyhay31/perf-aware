@@ -1,11 +1,11 @@
 mov SI, BX
 mov DH, AL
 mov CL, 12
-mov CH, -12
+mov CH, 65524
 mov CX, 12
-mov CX, -12
+mov CX, 65524
 mov DX, 3948
-mov DX, -108
+mov DX, 65428
 mov AL, BX + SI
 mov BX, BP + DI
 mov DX, BP

@@ -220,7 +220,11 @@ byte_parser::write_assembly_instruction(operation_joint op,
   static const std::string RegTable[] = {"AL", "CL", "DL", "BL", "AH", "CH",
                                          "DH", "BH", "AX", "CX", "DX", "BX",
                                          "SP", "BP", "SI", "DI"};
+  // DO THIS NEXT!!!
+
+  // vvvvvvvvvvvvvvvvvvvvvvvvvvvv
   // TODO(trey): MOD=00 R/M=110 - needs to be handled for direct address
+  // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   static const std::string RmTable[] = {
       "BX + SI", "BX + DI", "BP + SI", "BP + DI", "SI", "DI", "BP", "BX"};
   std::string instruction;
@@ -252,10 +256,10 @@ byte_parser::write_assembly_instruction(operation_joint op,
       std::cout << "doing immediate to reg" << std::endl;
       w_bonus = op.w_operation_is_2bytes ? 8 : 0;
       reg = RegTable[w_bonus + op.reg_byte];
-      int val;
+      uint16_t val;
       if(op.w_operation_is_2bytes)
         {
-          val = (next_bytes[1] << 8) | next_bytes[0];
+          val = ((next_bytes[1]) << 8) | next_bytes[0];
         }
       else
         {
